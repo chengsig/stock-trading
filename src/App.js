@@ -1,8 +1,16 @@
 import React, { Component } from 'react';
-import { fetchIndexes } from './Api';
+import { fetchIndexes, getPrice } from './Api';
+import Form from './Form';
 import logo from './logo.svg';
+import styled from 'styled-components';
 import './App.css';
 
+const SearchData = styled.div`
+  width: 400px;
+  padding: 20px;
+  text-align: center;
+  display: inline-block;
+`;
 
 export default class App extends Component {
   constructor(props) {
@@ -10,15 +18,21 @@ export default class App extends Component {
     this.state = {
       isLoading: true,
       prices: [],
+      searchResult: {},
     };
+    this.searchPrice = this.searchPrice.bind(this);
   }
 
   async componentDidMount() {
     let prices = await fetchIndexes();
     this.setState({ isLoading: false })
-    //console.log('what is the prices look like', prices)
     this.setState({ prices });
-    
+  }
+
+  async searchPrice(symbol) {
+    symbol.trim();
+    let searchResult = await getPrice(symbol);
+    this.setState({ searchResult });
   }
 
   render() {
@@ -28,22 +42,14 @@ export default class App extends Component {
     } else {
       html = (
         <div className="App">
-          <header className="App-header">
-            <img src={logo} className="App-logo" alt="logo" />
-            <p>
+          <Form triggerSearch={this.searchPrice} />
+          <SearchData>
+            {this.state.searchResult.symbol}
+            {this.state.searchResult.price}
+          </SearchData>
               {this.state.prices.map(data => (
                 <p>{data.price}, {data.symbol}</p>
               ))}
-            </p>
-            <a
-              className="App-link"
-              href="https://reactjs.org"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learn React
-        </a>
-          </header>
         </div>
       )
     }

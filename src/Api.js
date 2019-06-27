@@ -21,5 +21,5 @@ export async function fetchIndexes() {
 
 export async function getPrice(symbol) {
     let res = await axios.get(`${BASE_API_URL}${symbol}`);
-    return res.data;
+    return res.data[0];
 }
