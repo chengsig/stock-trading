@@ -19,6 +19,7 @@ export default class App extends Component {
       isLoading: true,
       prices: [],
       searchResult: {},
+      err: "",
     };
     this.searchPrice = this.searchPrice.bind(this);
   }
@@ -31,8 +32,13 @@ export default class App extends Component {
 
   async searchPrice(symbol) {
     symbol.trim();
+    this.setState({ err: "" });
     let searchResult = await getPrice(symbol);
-    this.setState({ searchResult });
+    if (searchResult === undefined) {
+      this.setState({ err: "invalid symble entered"});
+    } else {
+      this.setState({ searchResult });
+    }
   }
 
   render() {
@@ -46,6 +52,7 @@ export default class App extends Component {
           <SearchData>
             {this.state.searchResult.symbol}
             {this.state.searchResult.price}
+            {this.state.err}
           </SearchData>
               {this.state.prices.map(data => (
                 <p>{data.price}, {data.symbol}</p>
