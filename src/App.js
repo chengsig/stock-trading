@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { fetchIndexes, getPrice } from './Api';
 import Form from './Form';
+import Portfolio from './Portfolio';
 import logo from './logo.svg';
 import styled from 'styled-components';
 import './App.css';
@@ -18,6 +19,8 @@ export default class App extends Component {
     this.state = {
       isLoading: true,
       prices: [],
+      cashBalance: 5000,
+      portfolio: [],
       searchResult: {},
       err: "",
     };
@@ -57,6 +60,9 @@ export default class App extends Component {
               {this.state.prices.map(data => (
                 <p>{data.price}, {data.symbol}</p>
               ))}
+          <Portfolio id="portfolio"
+                     cashBalance={this.state.cashBalance}
+                     />
         </div>
       )
     }
