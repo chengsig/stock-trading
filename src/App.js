@@ -30,7 +30,7 @@ export default class App extends Component {
       err: "",
     };
     this.searchPrice = this.searchPrice.bind(this);
-    //this.buyStock = this.buyStock.bind(this);
+    this.buyStock = this.buyStock.bind(this);
   }
 
   async componentDidMount() {
@@ -51,9 +51,12 @@ export default class App extends Component {
     }
   }
 
-  // async buyStock(symbol, shares) {
-
-  // }
+  buyStock(symbol, shares, buyPrice) {
+    let newHolding = { symbol, shares, buyPrice };
+    this.setState(st => ({
+      portfolio: [...this.state.portfolio, newHolding]
+    }));
+  }
 
   render() {
     let searchResult = "";
@@ -62,6 +65,7 @@ export default class App extends Component {
         <BuyForm id="resultForm"
                      symbol={this.state.searchResult.symbol}
                      price={this.state.searchResult.price}
+                     triggerBuy={this.buyStock}
         />
       )
     }

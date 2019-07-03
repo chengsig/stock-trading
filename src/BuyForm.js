@@ -30,7 +30,11 @@ class BuyForm extends Component{
 
   handleSubmit(e){
     e.preventDefault();
-    this.props.triggerSearch(this.state.symbol);
+    this.props.triggerBuy(
+        this.props.symbol, 
+        this.state.shares, 
+        this.props.price
+        );
     this.setState(initialState);
   }
 
