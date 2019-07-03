@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { fetchIndexes, getPrice } from './Api';
 import Form from './Form';
+import BuyForm from './BuyForm';
 import Portfolio from './Portfolio';
 import logo from './logo.svg';
 import styled from 'styled-components';
@@ -18,6 +19,7 @@ export default class App extends Component {
     super(props);
     this.state = {
       isLoading: true,
+      showSearch: false,
       prices: [],
       cashBalance: 5000,
       portfolio: [],
@@ -25,6 +27,7 @@ export default class App extends Component {
       err: "",
     };
     this.searchPrice = this.searchPrice.bind(this);
+    //this.buyStock = this.buyStock.bind(this);
   }
 
   async componentDidMount() {
@@ -41,10 +44,25 @@ export default class App extends Component {
       this.setState({ err: "invalid symble entered"});
     } else {
       this.setState({ searchResult });
+      this.setState({ showSearch: true });
     }
   }
 
+  // async buyStock(symbol, shares) {
+
+  // }
+
   render() {
+    let searchResult = "";
+    if (this.state.showSearch) {
+      searchResult = (
+        <BuyForm id="resultForm"
+                     symbol={this.state.searchResult.symbol}
+                     price={this.state.searchResult.price}
+                    
+        />
+      )
+    }
     let html = "";
     if (this.state.isLoading) {
       html = "...loading";
@@ -53,8 +71,7 @@ export default class App extends Component {
         <div className="App">
           <Form triggerSearch={this.searchPrice} />
           <SearchData>
-            {this.state.searchResult.symbol}
-            {this.state.searchResult.price}
+            {searchResult}
             {this.state.err}
           </SearchData>
               {this.state.prices.map(data => (
