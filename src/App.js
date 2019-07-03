@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { fetchIndexes, getPrice } from './Api';
 import Form from './Form';
-import BuyForm from './BuyForm';
+import BuySellForm from './BuySellForm';
 import Portfolio from './Portfolio';
 import styled from 'styled-components';
 import './App.css';
@@ -62,11 +62,17 @@ export default class App extends Component {
     let searchResult = "";
     if (this.state.showSearch) {
       searchResult = (
-        <BuyForm id="resultForm"
-                     symbol={this.state.searchResult.symbol}
-                     price={this.state.searchResult.price}
-                     triggerBuy={this.buyStock}
-        />
+        <div id="SearchResult">
+          Symbol: {this.state.searchResult.symbol} <br/> 
+          Price: ${this.state.searchResult.price} <br/>
+          <BuySellForm id="resultForm"
+                   buySell="buy"
+                   symbol={this.state.searchResult.symbol}
+                   price={this.state.searchResult.price}
+                   triggerBuy={this.buyStock}
+          />
+        </div>
+        
       )
     }
     let html = "";

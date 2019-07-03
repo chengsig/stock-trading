@@ -17,8 +17,13 @@ export default class Portfolio extends Component {
         holdings = this.props.holdings.map(h => (
             <tr id={h.symbol}>
                 <th>{h.symbol}</th>
+                <th>{h.shares}</th>
                 <th>{h.buyPrice * h.shares}</th>
                 <th>gain/loss</th>
+                <th>
+                    Sellform
+                </th>
+                <th>sell button</th>
             </tr>
             )
         )
@@ -28,8 +33,12 @@ export default class Portfolio extends Component {
                 <Holdings id="currentHoldings">
                     <tr>
                         <th>Symbol</th>
+                        <th>Shares</th>
                         <th>Total</th>
                         <th>Gain/Loss</th>
+                        <th>Shares to sell</th>
+                        <th>Proceeds</th>
+                        <th> </th>
                     </tr>
                     {holdings}
 
