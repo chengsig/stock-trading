@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { fetchIndexes, getPrice } from './Api';
+import { fetchPortfolio, getPrice } from './Api';
 import Form from './Form';
 import BuySellForm from './BuySellForm';
 import Portfolio from './Portfolio';
@@ -19,7 +19,6 @@ export default class App extends Component {
     this.state = {
       isLoading: true,
       showSearch: false,
-      prices: [],
       cashBalance: 5000,
       portfolio: [
         { symbol: "AAPL", shares: 30, buyPrice: 110 },
@@ -31,12 +30,13 @@ export default class App extends Component {
     };
     this.searchPrice = this.searchPrice.bind(this);
     this.buyStock = this.buyStock.bind(this);
+    this.sellStock = this.sellStock.bind(this);
   }
 
   async componentDidMount() {
-    let prices = await fetchIndexes();
+    let portfolio = await fetchPortfolio(this.state.portfolio);
     this.setState({ isLoading: false })
-    this.setState({ prices });
+    this.setState({ portfolio });
   }
 
   async searchPrice(symbol) {
@@ -51,11 +51,28 @@ export default class App extends Component {
     }
   }
 
-  buyStock(symbol, shares, buyPrice) {
-    let newHolding = { symbol, shares, buyPrice };
+  buyStock(symbol, shares, buyPrice, curPrice) {
+    let newHolding = { symbol, shares, buyPrice, curPrice };
     this.setState(st => ({
       portfolio: [...this.state.portfolio, newHolding]
     }));
+  }
+
+  sellStock(symbol, sharesToSell, buyPrice, curPrice) {
+    let holdingInfo = this.state.portfolio.filter(h => h.symbol === symbol);
+    if (sharesToSell === holdingInfo[0].shares) {
+      this.setState(st => ({
+        portfolio: st.portfolio.filter(h => h.symbol !== symbol)
+      }))
+    } else if (sharesToSell < holdingInfo[0].shares) {
+      let updatedPortfolio = this.state.portfolio.map(h => {
+        if (h.symbol === symbol) {
+          return {...h, shares: h.shares - sharesToSell }
+        }
+        return h;
+      })
+      this.setState({ portfolio: updatedPortfolio });
+    }
   }
 
   render() {
@@ -86,12 +103,11 @@ export default class App extends Component {
             {searchResult}
             {this.state.err}
           </SearchData>
-              {this.state.prices.map(data => (
-                <p>{data.price}, {data.symbol}</p>
-              ))}
+          
           <Portfolio id="portfolio"
                      cashBalance={this.state.cashBalance}
                      holdings={this.state.portfolio}
+                     triggerSell={this.sellStock}
                      />
         </div>
       )

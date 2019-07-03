@@ -34,13 +34,15 @@ class BuySellForm extends Component{
       this.props.triggerBuy(
         this.props.symbol, 
         this.state.shares, 
-        this.props.price
+        this.props.price,
+        this.props.price,
         );
     } else if (this.props.buySell === 'sell') {
       this.props.triggerSell(
         this.props.symbol, 
-        this.state.shares, 
-        this.props.price
+        parseInt(this.state.shares), 
+        this.props.price,
+        this.props.price,
         );
     }
     this.setState(initialState);
@@ -67,7 +69,7 @@ class BuySellForm extends Component{
                          value={this.state.shares} 
                          name="shares"
                          />
-            Total: ${this.state.shares * this.props.price}
+            Total: ${(this.state.shares * this.props.price).toFixed(2)}
             {btn}
         </StyledBuySellForm>
     )}
