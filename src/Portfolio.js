@@ -22,13 +22,14 @@ export default class Portfolio extends Component {
         let holdings = [];
         for (let h of this.props.holdings) {
             total += h.curPrice * h.shares;
+            let holdingGLcolor = (h.curPrice - h.buyPrice) * h.shares >= 0 ? "green" : "red";
             holdings.push(
                 <tr id={h.symbol + h.shares}>
                     <td>{h.symbol}</td>
                     <td>${h.curPrice}</td>
                     <td>{h.shares}</td>
                     <td>${(h.curPrice * h.shares).toFixed(2)}</td>
-                    <td style={{ color: (h.curPrice - h.buyPrice) * h.shares >= 0 ? "green" : "red" }}>
+                    <td style={{ color: holdingGLcolor }}>
                         ${((h.curPrice - h.buyPrice) * h.shares).toFixed(2)}
                     </td>
                     <td>
@@ -62,7 +63,7 @@ export default class Portfolio extends Component {
                         </tr>
                         {holdings}
                         <tr>
-                            <td>Cash</td>
+                            <td>Cash$</td>
                             <td></td>
                             <td></td>
                             <td>${this.props.cashBalance}</td>
@@ -76,7 +77,7 @@ export default class Portfolio extends Component {
                             <td></td>
                             <td>${totalDisplay}</td>
                             <td style={{color: GLcolor}}>${gainLoss}</td>
-                            <td>Shares to sell/Proceeds</td>
+                            <td></td>
                             <td> </td>
                         </tr>
                     </tbody>
