@@ -3,7 +3,6 @@ import { fetchIndexes, getPrice } from './Api';
 import Form from './Form';
 import BuyForm from './BuyForm';
 import Portfolio from './Portfolio';
-import logo from './logo.svg';
 import styled from 'styled-components';
 import './App.css';
 
@@ -22,7 +21,11 @@ export default class App extends Component {
       showSearch: false,
       prices: [],
       cashBalance: 5000,
-      portfolio: [],
+      portfolio: [
+        { symbol: "AAPL", shares: 30, buyPrice: 110 },
+        { symbol: "AMZN", shares: 2, buyPrice: 798 },
+        { symbol: "RVLV", shares: 10, buyPrice: 33 },
+      ],
       searchResult: {},
       err: "",
     };
@@ -59,7 +62,6 @@ export default class App extends Component {
         <BuyForm id="resultForm"
                      symbol={this.state.searchResult.symbol}
                      price={this.state.searchResult.price}
-                    
         />
       )
     }
@@ -79,6 +81,7 @@ export default class App extends Component {
               ))}
           <Portfolio id="portfolio"
                      cashBalance={this.state.cashBalance}
+                     holdings={this.state.portfolio}
                      />
         </div>
       )
